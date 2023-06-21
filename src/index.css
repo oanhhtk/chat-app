@@ -57,7 +57,6 @@ body {
   display: flex;
 }
 
-/* 2. Flex direction */
 .flex-row {
   flex-direction: row;
 }
@@ -74,7 +73,6 @@ body {
   flex-direction: column-reverse;
 }
 
-/* 3. Flex wrap */
 .flex-wrap {
   flex-wrap: wrap;
 }
@@ -87,7 +85,6 @@ body {
   flex-wrap: wrap-reverse;
 }
 
-/* 4 Flex fow */
 .flex-flow-rowwrap {
   flex-flow: row wrap;
 }
@@ -96,7 +93,6 @@ body {
   flex-flow: row nowrap;
 }
 
-/* 5 Justify content */
 .justify-start {
   justify-content: flex-start;
 }
@@ -121,7 +117,6 @@ body {
   justify-content: space-evenly;
 }
 
-/* 6 Align Items */
 .items-start {
   align-items: flex-start;
 }
@@ -141,7 +136,6 @@ body {
   align-items: baseline;
 }
 
-/* 7 Align content */
 .content-start {
   align-content: flex-start;
 }
@@ -267,7 +261,6 @@ body {
   margin-bottom: 1.25em !important;
 }
 
-// Pading
 .p-1 {
   padding: 0.25em !important;
 }
@@ -287,8 +280,6 @@ body {
 .p-5 {
   padding: 1.25em !important;
 }
-
-// Grid layout
 
 .grid {
   display: grid;

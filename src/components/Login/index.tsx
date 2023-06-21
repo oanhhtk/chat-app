@@ -20,12 +20,12 @@ import {
 import {
   FacebookAuthProvider,
   GoogleAuthProvider,
-  getAuth,
+  getAdditionalUserInfo,
   signInWithPopup,
-  signInWithRedirect,
 } from "firebase/auth";
-import { auth } from "../../firebase/config";
 import { Navigate, useNavigate } from "react-router-dom";
+import { auth } from "../../firebase/config";
+import { addDocument } from "../../firebase/service";
 
 interface LoginProps {}
 
@@ -37,15 +37,22 @@ const Login: React.FC<LoginProps> = () => {
 
   const loginWithGoogle = async () => {
     try {
-      const {
-        user: { uid },
-      } = await signInWithPopup(auth, ggProvider);
-      console.log("user :>> ", uid);
+      const data = await signInWithPopup(auth, ggProvider);
+      const additonalInfo = getAdditionalUserInfo(data);
+      const user = data.user;
+      if (additonalInfo?.isNewUser) {
+        await addDocument("users", {
+          uid: user.uid,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+          email: user.email,
+          providerId: user.providerId,
+        });
+      }
 
-      if (uid) navigate("/");
+      if (user?.uid) navigate("/");
       message.success("Login successfully!");
     } catch (error: any) {
-      // Handle Errors here.
       navigate("/login");
     }
   };
@@ -143,7 +150,7 @@ const Login: React.FC<LoginProps> = () => {
                   <Checkbox>Remember me</Checkbox>
                 </Form.Item>
 
-                <a className="login-form-forgot" href="">
+                <a className="login-form-forgot" href="#">
                   Forgot password
                 </a>
               </Form.Item>
