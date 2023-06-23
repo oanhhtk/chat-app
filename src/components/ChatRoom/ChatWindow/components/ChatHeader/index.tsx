@@ -4,7 +4,9 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { Avatar, Button, Col, Row, Tooltip, Typography } from "antd";
-import React, { CSSProperties } from "react";
+import React, { CSSProperties, useContext, useState } from "react";
+import { AppContext } from "../../../../../context/AppProvider";
+import InviteMemberModal from "../../../../Modal/InviteMemberModal";
 
 interface ChatHeaderProps {
   className: string;
@@ -12,6 +14,12 @@ interface ChatHeaderProps {
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({ className, style }) => {
+  const [openInviteModal, setOpenInviteModal] = useState(false);
+  const { selectedRoom } = useContext(AppContext);
+
+  const addNewMember = async (vals: any) => {
+    console.log("vals :>> ", vals);
+  };
   return (
     <div
       className={className}
@@ -22,8 +30,8 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ className, style }) => {
     >
       <Row justify="space-between" align={"middle"}>
         <Col>
-          <Typography.Title level={5}>Room 1</Typography.Title>
-          <p>day la room 1</p>
+          <Typography.Title level={5}>{selectedRoom?.name}</Typography.Title>
+          <p>{selectedRoom?.descriptions}</p>
         </Col>
         <Col>
           <div
@@ -32,7 +40,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ className, style }) => {
               alignItems: "center",
             }}
           >
-            <Button>
+            <Button onClick={() => setOpenInviteModal(true)}>
               <UserAddOutlined /> Mời
             </Button>
             <Avatar.Group>
@@ -54,6 +62,15 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ className, style }) => {
           </div>
         </Col>
       </Row>
+
+      <InviteMemberModal
+        title="Thêm thành viên"
+        open={openInviteModal}
+        onCancel={() => setOpenInviteModal(false)}
+        onOK={addNewMember}
+        okText={"Thêm"}
+        cancelText={"Đóng"}
+      />
     </div>
   );
 };

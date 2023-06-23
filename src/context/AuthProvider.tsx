@@ -2,15 +2,16 @@ import { getAuth } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
+import { UserDataType } from "../typings";
 
 type AuthContextType = {
-  user?: any;
-  setUser?: (user: any) => void;
+  user?: UserDataType | any;
+  setUser?: (user: UserDataType) => void;
 };
 export const AuthContext = createContext<AuthContextType>({});
 
 export default function AuthProvider({ children }: any) {
-  const [user, setUser] = useState<any>({});
+  const [user, setUser] = useState<Partial<UserDataType>>({});
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const auth = getAuth();
@@ -19,8 +20,7 @@ export default function AuthProvider({ children }: any) {
     const unsubcribed = auth.onIdTokenChanged((user: any) => {
       console.log("[From AuthProvider]", { user });
       if (user?.uid) {
-        // console.log("uid :>> ", user);
-        setUser(user);
+        setUser(user as UserDataType);
         if (user.accessToken !== localStorage.getItem("accessToken")) {
           localStorage.setItem("accessToken", user.accessToken);
           // window.location.reload();

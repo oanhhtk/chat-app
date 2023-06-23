@@ -26,6 +26,7 @@ import {
 import { Navigate, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase/config";
 import { addDocument } from "../../firebase/service";
+import { COLLECTION } from "../../firebase/collections";
 
 interface LoginProps {}
 
@@ -41,7 +42,7 @@ const Login: React.FC<LoginProps> = () => {
       const additonalInfo = getAdditionalUserInfo(data);
       const user = data.user;
       if (additonalInfo?.isNewUser) {
-        await addDocument("users", {
+        await addDocument(COLLECTION.USERS, {
           uid: user.uid,
           displayName: user.displayName,
           photoURL: user.photoURL,

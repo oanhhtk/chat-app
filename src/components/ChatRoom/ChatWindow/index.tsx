@@ -1,10 +1,15 @@
+import { Alert } from "antd";
 import ChatBottom from "./components/ChatBottom";
 import ChatContent from "./components/ChatContent";
 import ChatHeader from "./components/ChatHeader";
+import { useContext } from "react";
+import { AppContext } from "../../../context/AppProvider";
 
 interface ChatWindowProps {}
 
 const ChatWindow: React.FC<ChatWindowProps> = () => {
+  const { selectedRoomId } = useContext(AppContext);
+  if (!selectedRoomId) return <Alert message="Chọn phòng" />;
   return (
     <div
       style={{
