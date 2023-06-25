@@ -1,6 +1,8 @@
 import {
   WhereFilterOp,
   collection,
+  getDoc,
+  getDocs,
   onSnapshot,
   orderBy,
   query,
@@ -27,23 +29,37 @@ export default function useFirestore<T>(
     if (condition) {
       query(
         collectionRef,
-        orderBy("createdAt"),
-        where(condition.fieldName, condition.operator, condition.compareValue)
+        where(condition.fieldName, condition.operator, condition.compareValue),
+        orderBy("createdAt", "desc")
       );
     }
-    const unsubcribe = onSnapshot(collectionRef, (snapshot) => {
-      const documents = snapshot.docs.map((item) => ({
-        ...item.data(),
-        id: item.id,
-      }));
-      setDocument(documents);
-    });
+
+    const currList: any[] = [];
+
+    const unsubcribe = onSnapshot(
+      collectionRef,
+      (snapshot: any) => {
+        snapshot.forEach((doc: any) => {
+          console.log("doc.data() :>> ", doc.data());
+        });
+        const documents = snapshot.docs.map((item: any) => {
+          console.log("object :>> ", item.data());
+          currList.push(item.data());
+          return {
+            ...item.data(),
+            id: item.id,
+          };
+        });
+        console.log("currList :>> ", currList);
+        setDocument(documents);
+      },
+      (erro) => {
+        console.log("erro :>> ", erro);
+      }
+    );
+
     return unsubcribe;
   }, [collectionName, condition]);
 
   return documents;
-}
-
-function loggingIdentity<Type>(arg: any): Type {
-  return arg;
 }

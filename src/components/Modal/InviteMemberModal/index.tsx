@@ -22,7 +22,7 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({
   const handleOnOk = async () => {
     await form.validateFields();
     const formVals = form.getFieldsValue();
-    onOK(formVals);
+    await onOK(formVals);
   };
   return (
     <>
