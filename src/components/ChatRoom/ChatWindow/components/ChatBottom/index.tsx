@@ -1,12 +1,19 @@
-import { Button, Col, Form, Input, Row } from "antd";
+import { Button, Col, Form, FormInstance, Input, Row } from "antd";
 import React, { CSSProperties } from "react";
 
 interface ChatBottomProps {
   className: string;
   style: CSSProperties;
+  form: FormInstance;
+  onSubmit: (value: string) => Promise<any>;
 }
 
-const ChatBottom: React.FC<ChatBottomProps> = ({ className, style }) => {
+const ChatBottom: React.FC<ChatBottomProps> = ({
+  className,
+  style,
+  onSubmit,
+  form,
+}) => {
   return (
     <div
       className={className}
@@ -18,6 +25,7 @@ const ChatBottom: React.FC<ChatBottomProps> = ({ className, style }) => {
       <Row>
         <Col span={24}>
           <Form
+            form={form}
             style={{
               width: "100%",
               display: "flex",
@@ -29,11 +37,19 @@ const ChatBottom: React.FC<ChatBottomProps> = ({ className, style }) => {
               style={{
                 width: "100%",
               }}
+              name="message"
             >
-              <Input autoComplete="off" placeholder="Nhập tin nhắn" />
+              <Input
+                name="message"
+                autoComplete="off"
+                placeholder="Nhập tin nhắn..."
+                onPressEnter={() => onSubmit(form.getFieldValue("message"))}
+              />
             </Form.Item>
             <Form.Item>
-              <Button>Gửi</Button>
+              <Button onClick={() => onSubmit(form.getFieldValue("message"))}>
+                Gửi
+              </Button>
             </Form.Item>
           </Form>
         </Col>

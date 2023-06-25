@@ -1,26 +1,49 @@
-import { PlusSquareOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Menu, MenuProps } from "antd";
-import React from "react";
+import {
+  PlusSquareOutlined,
+  UserOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
+import { Button, Menu, MenuProps, Tooltip, message } from "antd";
+import React, { useContext, useState } from "react";
+import { AppContext } from "../../context/AppProvider";
+import { AuthContext } from "../../context/AuthProvider";
+import { COLLECTION } from "../../firebase/collections";
+import { addDocument } from "../../firebase/service";
+import AddNewRoomModal from "../Modal/AddNewRoomModal";
 import UserInfo from "./UserInfo";
-interface SideBarProps {}
+import { auth } from "../../firebase/config";
+interface SideBarProps {
+  isCollapsed: boolean;
+}
 
-const items2: MenuProps["items"] = [UserOutlined].map((icon, index) => {
-  const key = String(index + 1);
-  return {
-    key: `sub${key}`,
-    icon: React.createElement(icon),
-    label: `Danh sách phòng`,
-    children: new Array(4).fill(null).map((_, j) => {
-      const subKey = index * 4 + j + 1;
-      return {
-        key: subKey,
-        label: `Room-${subKey}`,
-      };
-    }),
+const SideBar: React.FC<SideBarProps> = ({ isCollapsed }) => {
+  const [open, setOpen] = useState(false);
+  const { rooms, setSelectedRoomId } = useContext(AppContext);
+  const { user } = useContext(AuthContext);
+  const items2: MenuProps["items"] = [UserOutlined].map((icon, index) => {
+    return {
+      key: `list`,
+      icon: React.createElement(icon),
+      label: `Danh sách phòng`,
+      children: rooms?.map((item) => {
+        return {
+          key: item?.id,
+          label: item?.name,
+        };
+      }),
+    };
+  });
+
+  const addNewRoom = async (vals: any) => {
+    try {
+      await addDocument(COLLECTION.ROOMS, { ...vals, members: [user?.uid] });
+      message.success("Thêm phòng thành công");
+      setOpen(false);
+    } catch (error) {
+      message.error("Có lỗi xảy ra vui lòng thử lại!");
+    }
   };
-});
 
-const SideBar: React.FC<SideBarProps> = () => {
   return (
     <div
       style={{
@@ -29,21 +52,54 @@ const SideBar: React.FC<SideBarProps> = () => {
     >
       <Menu
         mode="inline"
-        defaultSelectedKeys={["4"]}
+        defaultOpenKeys={["list"]}
+        defaultSelectedKeys={["list"]}
+        onClick={(room) => {
+          setSelectedRoomId?.(room.key);
+        }}
         items={[
           {
             key: "ac",
-            label: <UserInfo />,
+            label: <UserInfo isCollapse={isCollapsed} />,
           },
           ...items2,
         ]}
       />
 
-      <div className="flex justify-center">
-        <Button className="text-center">
-          <PlusSquareOutlined /> Thêm phòng
+      <div className="flex flex-col justify-center">
+        <Button
+          shape={"default"}
+          type="text"
+          className="text-center"
+          style={{
+            margin: 10,
+          }}
+          onClick={() => setOpen(true)}
+        >
+          <PlusSquareOutlined /> {isCollapsed ? "" : " Thêm phòng"}
         </Button>
+        <Tooltip title="Logout">
+          <Button
+            shape={"default"}
+            type="text"
+            onClick={() => auth?.signOut()}
+            style={{
+              margin: 10,
+            }}
+          >
+            <LogoutOutlined /> {isCollapsed ? "" : "Đăng xuất"}
+          </Button>
+        </Tooltip>
       </div>
+
+      <AddNewRoomModal
+        title="Thêm phòng"
+        open={open}
+        onCancel={() => setOpen(false)}
+        onOK={addNewRoom}
+        okText={"Tạo phòng"}
+        cancelText={"Đóng"}
+      />
     </div>
   );
 };

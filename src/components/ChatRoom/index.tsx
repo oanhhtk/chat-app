@@ -1,58 +1,64 @@
-import { Layout } from "antd";
+import { Button, Layout } from "antd";
 import Sider from "antd/es/layout/Sider";
-import { Content, Footer } from "antd/es/layout/layout";
-import React from "react";
+import { Content, Header } from "antd/es/layout/layout";
+import React, { useState } from "react";
 import ChatWindow from "./ChatWindow";
 import SideBar from "./Sidebar";
 
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import ChatHeader from "./ChatWindow/components/ChatHeader";
 interface ChatRoomProps {}
 
 const ChatRoom: React.FC<ChatRoomProps> = () => {
+  const [collapsed, setCollapsed] = useState(true);
   return (
-    // <div
-    //   style={{
-    //     maxHeight: "100vh",
-    //     // overflow: "hidden",ø
-    //   }}
-    // >
-    //   <div>
-    //     <Row gutter={16}>
-    //       <Col span={6}>
-    //         <SideBar />
-    //       </Col>
-    //       <Col span={18}>
-    //         <ChatWindow />
-    //       </Col>
-    //     </Row>
-    //   </div>
-    // </div>
-
-    <Layout hasSider>
-      <Sider
-        style={{
-          overflow: "auto",
-          height: "100vh",
-          position: "fixed",
-          left: 0,
-          top: 0,
-          bottom: 0,
-        }}
-      >
+    <Layout
+      style={{
+        zIndex: 11,
+        background: "#fff",
+      }}
+    >
+      <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="demo-logo-vertical" />
-        <SideBar />
+        <SideBar isCollapsed={collapsed} />
       </Sider>
-      <Layout className="site-layout" style={{ marginLeft: 200 }}>
+      <Layout>
+        <Header
+          style={{
+            padding: 10,
+            background: "unset",
+            position: "sticky",
+            top: 0,
+            backgroundColor: "#fff",
+          }}
+          className="flex items-center"
+        >
+          {/* <Button
+            type="text"
+            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            onClick={() => setCollapsed(!collapsed)}
+            style={{
+              fontSize: "16px",
+              width: 50,
+              height: 50,
+            }}
+          /> */}
+          <ChatHeader
+            style={{
+              background: "unset",
+            }}
+          />
+        </Header>
         <Content
           style={{
             margin: "24px 16px 0",
             overflow: "initial",
-            minHeight: "100vh",
-            maxHeight: "100vh",
+            maxHeight: "100%",
           }}
         >
           <div
             style={{
-              padding: 24,
+              padding: 16,
               background: "#fff",
               height: "100%",
             }}

@@ -1,43 +1,37 @@
 import { LogoutOutlined } from "@ant-design/icons";
 import { Avatar, Button, Col, Row, Tooltip } from "antd";
-import { getAuth } from "firebase/auth";
-import { useEffect } from "react";
-import { db } from "../../firebase/config";
-import { collection, onSnapshot } from "firebase/firestore";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthProvider";
+import { auth } from "../../firebase/config";
 
-interface UserInfoProps {}
+interface UserInfoProps {
+  isCollapse: boolean;
+}
 
-const UserInfo: React.FC<UserInfoProps> = () => {
-  const auth = getAuth();
-
-  useEffect(() => {
-    // onSnapshot listen firestore change => trigger call fn
-    const unsub = onSnapshot(collection(db, "users"), (docsSnap) => {
-      //docsSnap la du lieu thuan từ firebase
-      console.log("docsSnap?.data() :>> ", docsSnap, docsSnap.docs);
-      const data = docsSnap.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      console.log("object :>> ", data);
-    });
-    return unsub;
-  }, []);
+const UserInfo: React.FC<UserInfoProps> = ({ isCollapse }) => {
+  const { user } = useContext(AuthContext);
 
   return (
     <div>
       <Row align={"middle"}>
         <Col span={6}>
-          <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=1" />
+          <Avatar
+            src={
+              user?.photoURL ||
+              "https://xsgames.co/randomusers/avatar.php?g=pixel&key=1"
+            }
+          />
         </Col>
-        <Col span={10}>Name</Col>
-        <Col span={8}>
+        <Col span={isCollapse ? 0 : 10}>
+          <span className="line-truncate">{user?.displayName}</span>
+        </Col>
+        {/* <Col span={isCollapse ? 10 : 8}>
           <Tooltip title="Logout">
             <Button type="text" onClick={() => auth?.signOut()}>
               <LogoutOutlined />
             </Button>
           </Tooltip>
-        </Col>
+        </Col> */}
       </Row>
     </div>
   );

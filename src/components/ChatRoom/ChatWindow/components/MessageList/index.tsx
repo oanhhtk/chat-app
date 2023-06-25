@@ -1,24 +1,22 @@
 import React from "react";
 import MessageItem from "../MessageItem";
 
-interface MessageListProps {}
+interface MessageListProps {
+  data: any[];
+}
 
-const MessageList: React.FC<MessageListProps> = () => {
+const MessageList: React.FC<MessageListProps> = ({ data = [] }) => {
+  console.log("data :>> ", data);
   return (
-    <div
-      style={{
-        maxHeight: "100%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "end",
-      }}
-    >
-      {[1, 2, 3, 4].map((item) => (
+    <div style={{}}>
+      {data.map((item) => (
         <MessageItem
-          text={item.toString()}
-          displayName={item.toString()}
-          createdAt={{}}
-          photoURL={""}
+          key={item?.id}
+          text={item?.text}
+          displayName={item?.displayName}
+          createdAt={item?.createdAt?.seconds}
+          photoURL={item?.photoURL}
+          userId={item?.uid}
         />
       ))}
     </div>
