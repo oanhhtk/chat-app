@@ -1,67 +1,80 @@
-import {
-  AntDesignOutlined,
-  UserAddOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { UserAddOutlined } from "@ant-design/icons";
 import { Avatar, Button, Col, Row, Tooltip, Typography } from "antd";
 import React, { CSSProperties, useContext, useState } from "react";
 import { AppContext } from "../../../../../context/AppProvider";
+import { COLLECTION } from "../../../../../firebase/collections";
+import { db } from "../../../../../firebase/config";
 import InviteMemberModal from "../../../../Modal/InviteMemberModal";
 
 interface ChatHeaderProps {
-  className: string;
+  className?: string;
   style: CSSProperties;
 }
 
-const ChatHeader: React.FC<ChatHeaderProps> = ({ className, style }) => {
+const ChatHeader: React.FC<ChatHeaderProps> = ({
+  className = "",
+  style = {},
+}) => {
   const [openInviteModal, setOpenInviteModal] = useState(false);
-  const { selectedRoom } = useContext(AppContext);
+  const { selectedRoom, members, selectedRoomId } = useContext(AppContext);
 
   const addNewMember = async (vals: any) => {
-    console.log("vals :>> ", vals);
+    //update member in current room
+    const curentRoomRef = db.collection(COLLECTION.ROOMS).doc(selectedRoomId);
+    curentRoomRef.update({
+      members: [
+        ...(selectedRoom?.members || []),
+        ...vals?.map((val: any) => val?.value),
+      ],
+    });
   };
+  if (!selectedRoom) return <></>;
+
   return (
     <div
       className={className}
       style={{
+        height: "100%",
         background: "#fff",
+        zIndex: 100,
         ...style,
+        flexGrow: 1,
       }}
     >
-      <Row justify="space-between" align={"middle"}>
-        <Col>
-          <Typography.Title level={5}>{selectedRoom?.name}</Typography.Title>
-          <p>{selectedRoom?.descriptions}</p>
-        </Col>
-        <Col>
+      <div className="flex justify-between items-center h-full">
+        <div className="flex flex-col">
+          <Typography.Text
+            strong
+            style={{
+              fontSize: "17px",
+            }}
+          >
+            {selectedRoom?.name}
+          </Typography.Text>
+          <Typography.Text>{selectedRoom?.descriptions}</Typography.Text>
+        </div>
+        <div>
           <div
             style={{
               display: "flex",
               alignItems: "center",
             }}
           >
-            <Button onClick={() => setOpenInviteModal(true)}>
-              <UserAddOutlined /> Mời
+            <Button type="text" onClick={() => setOpenInviteModal(true)}>
+              <UserAddOutlined />
             </Button>
             <Avatar.Group>
-              <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=1" />
-              <a href="https://ant.design">
-                <Avatar style={{ backgroundColor: "#f56a00" }}>K</Avatar>
-              </a>
-              <Tooltip title="Ant User" placement="top">
-                <Avatar
-                  style={{ backgroundColor: "#87d068" }}
-                  icon={<UserOutlined />}
-                />
-              </Tooltip>
-              <Avatar
-                style={{ backgroundColor: "#1677ff" }}
-                icon={<AntDesignOutlined />}
-              />
+              {members?.map((mem) => (
+                <Tooltip title={mem.displayName} placement="top">
+                  <Avatar src={mem.photoURL}>
+                    {mem.photoURL ? "" : mem.displayName?.charAt(0)}
+                  </Avatar>
+                </Tooltip>
+              ))}
             </Avatar.Group>
           </div>
-        </Col>
-      </Row>
+        </div>
+      </div>
 
       <InviteMemberModal
         title="Thêm thành viên"

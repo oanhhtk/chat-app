@@ -1,5 +1,9 @@
-import { PlusSquareOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Menu, MenuProps, message } from "antd";
+import {
+  PlusSquareOutlined,
+  UserOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
+import { Button, Menu, MenuProps, Tooltip, message } from "antd";
 import React, { useContext, useState } from "react";
 import { AppContext } from "../../context/AppProvider";
 import { AuthContext } from "../../context/AuthProvider";
@@ -7,9 +11,12 @@ import { COLLECTION } from "../../firebase/collections";
 import { addDocument } from "../../firebase/service";
 import AddNewRoomModal from "../Modal/AddNewRoomModal";
 import UserInfo from "./UserInfo";
-interface SideBarProps {}
+import { auth } from "../../firebase/config";
+interface SideBarProps {
+  isCollapsed: boolean;
+}
 
-const SideBar: React.FC<SideBarProps> = () => {
+const SideBar: React.FC<SideBarProps> = ({ isCollapsed }) => {
   const [open, setOpen] = useState(false);
   const { rooms, setSelectedRoomId } = useContext(AppContext);
   const { user } = useContext(AuthContext);
@@ -28,7 +35,6 @@ const SideBar: React.FC<SideBarProps> = () => {
   });
 
   const addNewRoom = async (vals: any) => {
-    console.log("vals :>> ", vals);
     try {
       await addDocument(COLLECTION.ROOMS, { ...vals, members: [user?.uid] });
       message.success("Thêm phòng thành công");
@@ -54,16 +60,36 @@ const SideBar: React.FC<SideBarProps> = () => {
         items={[
           {
             key: "ac",
-            label: <UserInfo />,
+            label: <UserInfo isCollapse={isCollapsed} />,
           },
           ...items2,
         ]}
       />
 
-      <div className="flex justify-center">
-        <Button className="text-center" onClick={() => setOpen(true)}>
-          <PlusSquareOutlined /> Thêm phòng
+      <div className="flex flex-col justify-center">
+        <Button
+          shape={"default"}
+          type="text"
+          className="text-center"
+          style={{
+            margin: 10,
+          }}
+          onClick={() => setOpen(true)}
+        >
+          <PlusSquareOutlined /> {isCollapsed ? "" : " Thêm phòng"}
         </Button>
+        <Tooltip title="Logout">
+          <Button
+            shape={"default"}
+            type="text"
+            onClick={() => auth?.signOut()}
+            style={{
+              margin: 10,
+            }}
+          >
+            <LogoutOutlined /> {isCollapsed ? "" : "Đăng xuất"}
+          </Button>
+        </Tooltip>
       </div>
 
       <AddNewRoomModal

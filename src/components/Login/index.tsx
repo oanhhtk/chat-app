@@ -17,37 +17,34 @@ import {
   message,
 } from "antd";
 
-import {
-  FacebookAuthProvider,
-  GoogleAuthProvider,
-  getAdditionalUserInfo,
-  signInWithPopup,
-} from "firebase/auth";
+import {} from "firebase/auth";
 import { Navigate, useNavigate } from "react-router-dom";
-import { auth } from "../../firebase/config";
-import { addDocument } from "../../firebase/service";
+import { addDocument, generateKeywords } from "../../firebase/service";
 import { COLLECTION } from "../../firebase/collections";
+import firebase, { auth } from "../../firebase/config";
 
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = () => {
-  const fbProvider = new FacebookAuthProvider();
-  const ggProvider = new GoogleAuthProvider();
+  const fbProvider = new firebase.auth.FacebookAuthProvider();
+  const googleProvider = new firebase.auth.GoogleAuthProvider();
   // const auth = getAuth();
   const navigate = useNavigate();
 
   const loginWithGoogle = async () => {
     try {
-      const data = await signInWithPopup(auth, ggProvider);
-      const additonalInfo = getAdditionalUserInfo(data);
+      const data = await auth.signInWithPopup(googleProvider);
+      // const additonalInfo = getAdditionalUserInfo(data);
       const user = data.user;
-      if (additonalInfo?.isNewUser) {
+      console.log("data :>> ", data);
+      if (data.additionalUserInfo?.isNewUser) {
         await addDocument(COLLECTION.USERS, {
-          uid: user.uid,
-          displayName: user.displayName,
-          photoURL: user.photoURL,
-          email: user.email,
-          providerId: user.providerId,
+          uid: user?.uid,
+          displayName: user?.displayName,
+          photoURL: user?.photoURL,
+          email: user?.email,
+          providerId: data.additionalUserInfo?.providerId,
+          keywords: generateKeywords(user?.displayName || ""),
         });
       }
 

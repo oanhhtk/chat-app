@@ -1,8 +1,8 @@
-import { getAuth } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
 import { UserDataType } from "../typings";
+import { auth } from "../firebase/config";
 
 type AuthContextType = {
   user?: UserDataType | any;
@@ -14,7 +14,6 @@ export default function AuthProvider({ children }: any) {
   const [user, setUser] = useState<Partial<UserDataType>>({});
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const auth = getAuth();
 
   useEffect(() => {
     const unsubcribed = auth.onIdTokenChanged((user: any) => {
@@ -29,7 +28,6 @@ export default function AuthProvider({ children }: any) {
         return;
       }
 
-      // reset user info
       console.log("reset");
       setIsLoading(false);
       setUser({});

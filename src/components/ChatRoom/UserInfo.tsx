@@ -1,13 +1,14 @@
 import { LogoutOutlined } from "@ant-design/icons";
 import { Avatar, Button, Col, Row, Tooltip } from "antd";
-import { getAuth } from "firebase/auth";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthProvider";
+import { auth } from "../../firebase/config";
 
-interface UserInfoProps {}
+interface UserInfoProps {
+  isCollapse: boolean;
+}
 
-const UserInfo: React.FC<UserInfoProps> = () => {
-  const auth = getAuth();
+const UserInfo: React.FC<UserInfoProps> = ({ isCollapse }) => {
   const { user } = useContext(AuthContext);
 
   return (
@@ -21,16 +22,16 @@ const UserInfo: React.FC<UserInfoProps> = () => {
             }
           />
         </Col>
-        <Col span={10}>
+        <Col span={isCollapse ? 0 : 10}>
           <span className="line-truncate">{user?.displayName}</span>
         </Col>
-        <Col span={8}>
+        {/* <Col span={isCollapse ? 10 : 8}>
           <Tooltip title="Logout">
             <Button type="text" onClick={() => auth?.signOut()}>
               <LogoutOutlined />
             </Button>
           </Tooltip>
-        </Col>
+        </Col> */}
       </Row>
     </div>
   );

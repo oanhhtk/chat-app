@@ -360,8 +360,16 @@ body {
 .overflow-y-scroll {
   overflow-y: scroll;
 }
+
+.ant-layout {
+  min-height: 100vh;
+}
 .ant-layout-sider {
   background: #fff !important;
+}
+.ant-layout-header {
+  background: #fff !important;
+  z-index: 100;
 }
 .line-truncate {
   display: -webkit-box;
@@ -395,4 +403,18 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.date {
+  font-size: 11px !important;
+}
+
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  /*left: 10px;*/
+  /*right: 20px;*/
+  /*bottom: 10px;*/
 }
