@@ -15,10 +15,7 @@ interface MessageItemProps {
 }
 
 function formatDate(seconds: any) {
-  // let formattedDate = "";
-
-  // return formattedDate;
-  if (moment(new Date(seconds * 1000)) < moment().subtract(1, "minute"))
+  if (moment(new Date(seconds * 1000)) < moment().subtract(10, "minute"))
     return moment(new Date(seconds * 1000))
       .startOf("seconds")
       .fromNow();
