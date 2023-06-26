@@ -1,12 +1,11 @@
 import { Alert, Form, message } from "antd";
-import ChatBottom from "./components/ChatBottom";
-import ChatContent from "./components/ChatContent";
-import ChatHeader from "./components/ChatHeader";
 import { useContext } from "react";
 import { AppContext } from "../../../context/AppProvider";
-import { addDocument } from "../../../firebase/service";
-import { COLLECTION } from "../../../firebase/collections";
 import { AuthContext } from "../../../context/AuthProvider";
+import { COLLECTION } from "../../../firebase/collections";
+import { addDocument } from "../../../firebase/service";
+import ChatBottom from "./components/ChatBottom";
+import ChatContent from "./components/ChatContent";
 
 interface ChatWindowProps {}
 

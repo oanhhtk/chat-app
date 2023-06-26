@@ -1,16 +1,15 @@
-import { Button, Layout } from "antd";
+import { Layout } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
 import React, { useState } from "react";
 import ChatWindow from "./ChatWindow";
 import SideBar from "./Sidebar";
 
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import ChatHeader from "./ChatWindow/components/ChatHeader";
 interface ChatRoomProps {}
 
 const ChatRoom: React.FC<ChatRoomProps> = () => {
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed] = useState(true);
   return (
     <Layout
       style={{
@@ -43,6 +42,11 @@ const ChatRoom: React.FC<ChatRoomProps> = () => {
               height: 50,
             }}
           /> */}
+          <div
+            style={{
+              width: "80px",
+            }}
+          ></div>
           <ChatHeader
             style={{
               background: "unset",
@@ -51,7 +55,7 @@ const ChatRoom: React.FC<ChatRoomProps> = () => {
         </Header>
         <Content
           style={{
-            margin: "24px 16px 0",
+            margin: "0",
             overflow: "initial",
             maxHeight: "100%",
           }}
@@ -61,6 +65,7 @@ const ChatRoom: React.FC<ChatRoomProps> = () => {
               padding: 16,
               background: "#fff",
               height: "100%",
+              paddingLeft: 80,
             }}
           >
             <ChatWindow />

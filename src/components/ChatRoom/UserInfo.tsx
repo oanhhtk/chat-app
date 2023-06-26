@@ -1,8 +1,6 @@
-import { LogoutOutlined } from "@ant-design/icons";
-import { Avatar, Button, Col, Row, Tooltip } from "antd";
+import { Avatar, Col, Row } from "antd";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthProvider";
-import { auth } from "../../firebase/config";
 
 interface UserInfoProps {
   isCollapse: boolean;

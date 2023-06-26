@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { AppContext } from "../../../../../context/AppProvider";
 import useFirestore from "../../../../../hooks/useFirestore";
 import MessageList from "../MessageList";
@@ -9,6 +9,7 @@ interface ChatContentProps {
 
 const ChatContent: React.FC<ChatContentProps> = ({ className = "" }) => {
   const { selectedRoom } = useContext(AppContext);
+  const messageListRef = useRef<any>(null);
 
   const condition = React.useMemo(
     () => ({
@@ -20,6 +21,19 @@ const ChatContent: React.FC<ChatContentProps> = ({ className = "" }) => {
   );
 
   const messages = useFirestore("messages", condition);
+
+  // console.log("data :>> ", messages);
+
+  // useEffect(() => {
+  //   // scroll to bottom after message changed
+  //   if (messageListRef?.current) {
+  //     setTimeout(() => {
+  //       console.log("1000");
+  //       messageListRef.current.scrollTop =
+  //         messageListRef.current.scrollHeight + 50;
+  //     });
+  //   }
+  // }, [messages]);
   return (
     <div
       className={className}
@@ -30,6 +44,7 @@ const ChatContent: React.FC<ChatContentProps> = ({ className = "" }) => {
         overflowY: "scroll",
         zIndex: 10,
       }}
+      ref={messageListRef}
     >
       <MessageList data={messages} />
     </div>
