@@ -1,8 +1,8 @@
 import { Avatar, Typography } from "antd";
+import moment from "moment";
 import React, { useContext } from "react";
-import { formatRelative } from "date-fns";
-import { AppContext } from "../../../../../context/AppProvider";
 import { AuthContext } from "../../../../../context/AuthProvider";
+import { CheckCircleTwoTone } from "@ant-design/icons";
 
 interface MessageItemProps {
   text: string;
@@ -10,19 +10,25 @@ interface MessageItemProps {
   createdAt: any;
   photoURL: string;
   userId: string;
+  lastEl: boolean;
 }
 
 function formatDate(seconds: any) {
-  let formattedDate = "";
+  // let formattedDate = "";
 
-  if (seconds) {
-    formattedDate = formatRelative(new Date(seconds * 1000), new Date());
+  // if (seconds) {
+  //   formattedDate = formatRelative(new Date(seconds * 1000), new Date());
 
-    formattedDate =
-      formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
-  }
+  //   formattedDate =
+  //     formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+  // }
 
-  return formattedDate;
+  // return formattedDate;
+  if (moment(new Date(seconds * 1000)) < moment().subtract(1, "minute"))
+    return moment(new Date(seconds * 1000))
+      .startOf("seconds")
+      .fromNow();
+  return "";
 }
 
 const MessageItem: React.FC<MessageItemProps> = ({
@@ -31,13 +37,19 @@ const MessageItem: React.FC<MessageItemProps> = ({
   displayName,
   createdAt,
   userId,
+  lastEl,
 }) => {
   const {
     user: { uid },
   } = useContext(AuthContext);
+
+  console.log("object :>> ", lastEl);
+
+  const isCurrentUser = uid === userId;
+
   return (
     <>
-      {uid === userId ? (
+      {isCurrentUser ? (
         <div
           style={{
             marginBottom: "10px",
@@ -51,39 +63,37 @@ const MessageItem: React.FC<MessageItemProps> = ({
               height: "10px",
             }}
           ></div>
-          <div className="flex flex-col gap-1">
-            <div className="flex justify-end">
-              <div className="flex gap-1">
-                <Avatar size="small" src={photoURL}>
-                  {photoURL ? "" : displayName?.charAt(0)?.toUpperCase()}
-                </Avatar>
-                <Typography.Text
-                  className="author"
-                  style={{
-                    fontSize: "14px",
-                  }}
-                  strong
-                >
-                  Bạn
-                </Typography.Text>
-              </div>
-            </div>
+          <div className="flex flex-col gap-1 items-end justify-end">
+            <div className="flex justify-end"></div>
             <div
               className="flex flex-col"
               style={{
                 background: "rgba(5, 145, 255, 0.1)",
                 borderRadius: "20px",
-                padding: 10,
+                width: "fit-content",
               }}
             >
               <Typography.Text
-                className="content p-2"
+                className="content"
                 style={{
                   textAlign: "end",
+                  width: "fit-content",
+                  padding: "2px 8px",
                 }}
               >
                 {text}
               </Typography.Text>
+            </div>
+            {lastEl && isCurrentUser ? (
+              <div
+                style={{
+                  fontSize: 11,
+                  color: "GrayText",
+                }}
+              >
+                <CheckCircleTwoTone /> Đã gửi
+              </div>
+            ) : (
               <Typography.Text
                 className="date flex justify-end"
                 style={{
@@ -92,7 +102,7 @@ const MessageItem: React.FC<MessageItemProps> = ({
               >
                 {formatDate(createdAt)}
               </Typography.Text>
-            </div>
+            )}
           </div>
         </div>
       ) : (

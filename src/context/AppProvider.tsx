@@ -10,6 +10,7 @@ type AppContextType = {
   selectedRoomId: string;
   setSelectedRoomId: (room: string) => void;
   selectedRoom: RoomDataType;
+  scrollToLastElement: (elRef: any, list: any[]) => void;
 };
 
 export const AppContext = createContext<Partial<AppContextType>>({});
@@ -45,6 +46,8 @@ export default function AppProvider({ children }: any) {
 
   const members = useFirestore(COLLECTION.USERS, userCondition as any);
 
+  const scrollToLastElement = (elRef: any, list: any[]) => {};
+
   return (
     <AppContext.Provider
       value={{
@@ -53,6 +56,7 @@ export default function AppProvider({ children }: any) {
         selectedRoomId,
         setSelectedRoomId,
         selectedRoom,
+        scrollToLastElement,
       }}
     >
       <>{children}</>
