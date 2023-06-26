@@ -11,9 +11,6 @@ interface ChatBottomProps {
 const ChatBottom = ({ className, style, onSubmit, form }: ChatBottomProps) => {
   const inputRef = useRef<any>();
 
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
   return (
     <div
       className={className}
