@@ -16,8 +16,6 @@ import {
   Typography,
   message,
 } from "antd";
-
-import {} from "firebase/auth";
 import { Navigate, useNavigate } from "react-router-dom";
 import { addDocument, generateKeywords } from "../../firebase/service";
 import { COLLECTION } from "../../firebase/collections";
