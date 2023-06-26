@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useRef } from "react";
 import { AppContext } from "../../../../../context/AppProvider";
 import useFirestore from "../../../../../hooks/useFirestore";
 import MessageList from "../MessageList";
@@ -42,6 +42,7 @@ const ChatContent: React.FC<ChatContentProps> = ({ className = "" }) => {
         flexDirection: "column",
         justifyContent: "flex-end",
         overflowY: "scroll",
+        overflowX: "hidden",
         zIndex: 10,
       }}
       ref={messageListRef}
