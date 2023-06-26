@@ -3,6 +3,7 @@ import moment from "moment";
 import React, { useContext } from "react";
 import { AuthContext } from "../../../../../context/AuthProvider";
 import { CheckCircleTwoTone } from "@ant-design/icons";
+import { formatRelative } from "date-fns";
 
 interface MessageItemProps {
   text: string;
@@ -16,13 +17,6 @@ interface MessageItemProps {
 function formatDate(seconds: any) {
   // let formattedDate = "";
 
-  // if (seconds) {
-  //   formattedDate = formatRelative(new Date(seconds * 1000), new Date());
-
-  //   formattedDate =
-  //     formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
-  // }
-
   // return formattedDate;
   if (moment(new Date(seconds * 1000)) < moment().subtract(1, "minute"))
     return moment(new Date(seconds * 1000))
@@ -30,6 +24,22 @@ function formatDate(seconds: any) {
       .fromNow();
   return "";
 }
+
+// const setTimePerious = (seconds: number, minute: number) => {
+//   if (seconds) {
+//     if (
+//       moment(new Date(seconds * 1000)) < moment().subtract(minute, "minute")
+//     ) {
+//       let formattedDate = "";
+
+//       formattedDate = formatRelative(new Date(seconds * 1000), new Date());
+
+//       return (formattedDate =
+//         formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1));
+//     }
+//   }
+//   return "";
+// };
 
 const MessageItem: React.FC<MessageItemProps> = ({
   text,

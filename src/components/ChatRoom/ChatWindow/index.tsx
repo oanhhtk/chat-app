@@ -10,13 +10,14 @@ import ChatContent from "./components/ChatContent";
 interface ChatWindowProps {}
 
 const ChatWindow: React.FC<ChatWindowProps> = () => {
-  const { selectedRoom } = useContext(AppContext);
   const {
     user: { uid, photoURL, displayName },
   } = useContext(AuthContext);
 
+  const { selectedRoom } = useContext(AppContext);
+
   const [form] = Form.useForm();
-  if (!selectedRoom) return <Alert message="Chọn phòng" />;
+  if (!selectedRoom) return <Alert message="Helooo, biết đây là đâu hon 🤭" />;
 
   const handleOnSubmit = async (text: string) => {
     try {

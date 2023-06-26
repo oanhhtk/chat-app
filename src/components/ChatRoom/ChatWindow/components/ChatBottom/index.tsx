@@ -1,5 +1,5 @@
 import { Button, Col, Form, FormInstance, Input, Row } from "antd";
-import React, { CSSProperties } from "react";
+import React, { CSSProperties, forwardRef, useEffect, useRef } from "react";
 
 interface ChatBottomProps {
   className: string;
@@ -8,12 +8,12 @@ interface ChatBottomProps {
   onSubmit: (value: string) => Promise<any>;
 }
 
-const ChatBottom: React.FC<ChatBottomProps> = ({
-  className,
-  style,
-  onSubmit,
-  form,
-}) => {
+const ChatBottom = ({ className, style, onSubmit, form }: ChatBottomProps) => {
+  const inputRef = useRef<any>();
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
   return (
     <div
       className={className}
@@ -40,14 +40,23 @@ const ChatBottom: React.FC<ChatBottomProps> = ({
               name="message"
             >
               <Input
+                ref={inputRef}
                 name="message"
                 autoComplete="off"
                 placeholder="Nhập tin nhắn..."
-                onPressEnter={() => onSubmit(form.getFieldValue("message"))}
+                onPressEnter={async () => {
+                  await onSubmit(form.getFieldValue("message"));
+                  inputRef.current?.focus();
+                }}
               />
             </Form.Item>
             <Form.Item>
-              <Button onClick={() => onSubmit(form.getFieldValue("message"))}>
+              <Button
+                onClick={async () => {
+                  await onSubmit(form.getFieldValue("message"));
+                  inputRef.current?.focus();
+                }}
+              >
                 Gửi
               </Button>
             </Form.Item>
@@ -58,4 +67,4 @@ const ChatBottom: React.FC<ChatBottomProps> = ({
   );
 };
 
-export default ChatBottom;
+export default forwardRef(ChatBottom);
