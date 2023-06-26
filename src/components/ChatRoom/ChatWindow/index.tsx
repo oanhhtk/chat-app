@@ -41,11 +41,15 @@ const ChatWindow: React.FC<ChatWindowProps> = () => {
     >
       <ChatContent className="h-full relative" />
       <ChatBottom
-        className="sticky"
+        className="fixed"
         form={form}
         onSubmit={handleOnSubmit}
         style={{
-          padding: "20px 0",
+          padding: "20px",
+          bottom: 0,
+          left: 0,
+          zIndex: 1000,
+          width: "100%",
         }}
       />
     </div>
