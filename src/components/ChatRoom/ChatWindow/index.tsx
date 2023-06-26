@@ -20,6 +20,7 @@ const ChatWindow: React.FC<ChatWindowProps> = () => {
   if (!selectedRoom) return <Alert message="Helooo, biết đây là đâu hon 🤭" />;
 
   const handleOnSubmit = async (text: string) => {
+    if (!text) return;
     try {
       await addDocument(COLLECTION.MESSAGES, {
         text,

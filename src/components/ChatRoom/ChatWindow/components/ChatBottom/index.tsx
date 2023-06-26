@@ -1,5 +1,5 @@
 import { Button, Col, Form, FormInstance, Input, Row } from "antd";
-import React, { CSSProperties, forwardRef, useEffect, useRef } from "react";
+import { CSSProperties, forwardRef, useRef } from "react";
 
 interface ChatBottomProps {
   className: string;
