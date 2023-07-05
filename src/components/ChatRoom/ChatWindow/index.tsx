@@ -17,7 +17,7 @@ const ChatWindow: React.FC<ChatWindowProps> = () => {
   const { selectedRoom } = useContext(AppContext);
 
   const [form] = Form.useForm();
-  if (!selectedRoom) return <Alert message="Helooo, biết đây là đâu hon 🤭" />;
+  if (!selectedRoom) return <Alert message="Bạn chưa chọn phòng 🫢" />;
 
   const handleOnSubmit = async (text: string) => {
     if (!text) return;
