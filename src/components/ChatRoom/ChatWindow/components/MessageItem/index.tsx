@@ -50,8 +50,6 @@ const MessageItem: React.FC<MessageItemProps> = ({
     user: { uid },
   } = useContext(AuthContext);
 
-  console.log("object :>> ", lastEl);
-
   const isCurrentUser = uid === userId;
 
   return (
