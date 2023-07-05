@@ -173,6 +173,7 @@ const Login: React.FC<LoginProps> = () => {
         className="flex justify-center items-center"
         style={{
           width: "100%",
+          overflowX: "hidden",
         }}
       >
         <div

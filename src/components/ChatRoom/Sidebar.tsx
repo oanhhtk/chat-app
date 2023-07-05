@@ -3,7 +3,7 @@ import {
   UserOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
-import { Button, Menu, MenuProps, Tooltip, message } from "antd";
+import { Button, Menu, MenuProps, Popconfirm, Tooltip, message } from "antd";
 import React, { useContext, useState } from "react";
 import { AppContext } from "../../context/AppProvider";
 import { AuthContext } from "../../context/AuthProvider";
@@ -79,16 +79,24 @@ const SideBar: React.FC<SideBarProps> = ({ isCollapsed }) => {
           <PlusSquareOutlined /> {isCollapsed ? "" : " Thêm phòng"}
         </Button>
         <Tooltip title="Logout">
-          <Button
-            shape={"default"}
-            type="text"
-            onClick={() => auth?.signOut()}
-            style={{
-              margin: 10,
-            }}
+          <Popconfirm
+            title="Bạn có muốn đăng xuất?"
+            description=""
+            okText="Đồng ý"
+            cancelText="Huỷ"
+            placement="right"
+            onConfirm={() => auth?.signOut()}
           >
-            <LogoutOutlined /> {isCollapsed ? "" : "Đăng xuất"}
-          </Button>
+            <Button
+              shape={"default"}
+              type="text"
+              style={{
+                margin: 10,
+              }}
+            >
+              <LogoutOutlined /> {isCollapsed ? "" : "Đăng xuất"}
+            </Button>
+          </Popconfirm>
         </Tooltip>
       </div>
 
