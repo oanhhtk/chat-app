@@ -1,4 +1,4 @@
-import { Avatar, Form, Modal, Select, Spin } from "antd";
+import { Avatar, Button, Form, Modal, Select, Spin } from "antd";
 import { debounce } from "lodash";
 import React, { useContext, useState } from "react";
 import { AppContext } from "../../../context/AppProvider";
@@ -75,6 +75,7 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({
   const [value, setValue] = useState([]);
 
   const { selectedRoom } = useContext(AppContext);
+
   const handleOnOk = async () => {
     await form.validateFields();
     const formVals = form.getFieldsValue();
@@ -102,12 +103,17 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({
       <Modal
         title={title}
         open={open}
-        onOk={handleOnOk}
         onCancel={onCancel}
         okText={okText}
         cancelText={cancelText}
+        footer={null}
       >
-        <Form form={form} layout="vertical" autoComplete="off">
+        <Form
+          form={form}
+          layout="vertical"
+          autoComplete="off"
+          onFinish={handleOnOk}
+        >
           <Form.Item
             name="search_user"
             label="Tên thành viên"
@@ -124,6 +130,19 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({
               style={{ width: "100%" }}
               curMembers={selectedRoom?.members}
             />
+          </Form.Item>
+
+          <Form.Item className="flex justify-end">
+            <Button
+              htmlType="button"
+              onClick={onCancel}
+              style={{ margin: "8px" }}
+            >
+              {cancelText}
+            </Button>
+            <Button type="primary" htmlType="submit">
+              {okText}
+            </Button>
           </Form.Item>
         </Form>
       </Modal>

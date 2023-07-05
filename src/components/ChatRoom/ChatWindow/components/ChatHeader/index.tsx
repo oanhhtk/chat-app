@@ -19,6 +19,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   const { selectedRoom, members, selectedRoomId } = useContext(AppContext);
 
   const addNewMember = async (vals: any) => {
+    if (!vals || vals?.length === 0) return;
     //update member in current room
     const curentRoomRef = db.collection(COLLECTION.ROOMS).doc(selectedRoomId);
     curentRoomRef.update({

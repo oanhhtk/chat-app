@@ -1,4 +1,4 @@
-import { Form, Input, Modal } from "antd";
+import { Button, Form, Input, Modal } from "antd";
 import React from "react";
 
 interface AddNewRoomModalProps {
@@ -29,16 +29,17 @@ const AddNewRoomModal: React.FC<AddNewRoomModalProps> = ({
       <Modal
         title={title}
         open={open}
-        onOk={handleOnOk}
         onCancel={onCancel}
         okText={okText}
         cancelText={cancelText}
+        footer={null}
       >
         <Form
           form={form}
           name="validateOnly"
           layout="vertical"
           autoComplete="off"
+          onFinish={handleOnOk}
         >
           <Form.Item
             name="name"
@@ -49,6 +50,18 @@ const AddNewRoomModal: React.FC<AddNewRoomModalProps> = ({
           </Form.Item>
           <Form.Item name="descriptions" label="Mô tả">
             <Input.TextArea placeholder="Nhập mô tả" />
+          </Form.Item>
+          <Form.Item className="flex justify-end">
+            <Button
+              htmlType="button"
+              onClick={onCancel}
+              style={{ margin: "8px" }}
+            >
+              {cancelText}
+            </Button>
+            <Button type="primary" htmlType="submit">
+              {okText}
+            </Button>
           </Form.Item>
         </Form>
       </Modal>
